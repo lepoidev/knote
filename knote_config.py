@@ -29,10 +29,10 @@ def get_config_data():
         return config_data
 
 class TimePeriods:
-    def __init__(self):
-        self.days = []
-        self.start = None
-        self.end = None
+    def __init__(self, days=[], start=None, end=None):
+        self.days = days
+        self.start = start
+        self.end = end
 
     def contains(self, active_datetime) -> bool:
         date = active_datetime.date()
@@ -42,12 +42,12 @@ class TimePeriods:
         return matches_day and matches_time
 
 class Subject:
-    def __init__(self):
-        self.name = None
-        self.app = None
-        self.periods = []
-        self.start_date = None
-        self.end_date = None
+    def __init__(self, name=None, app=None, periods=[], start_date=None, end_date=None):
+        self.name = name
+        self.app = app
+        self.periods = periods
+        self.start_date = start_date
+        self.end_date = end_date
 
     def is_active(self, active_datetime) -> bool:
         matches = filter(lambda period : period.contains(active_datetime), self.periods)
@@ -55,6 +55,8 @@ class Subject:
 
 class ConfigEncoder(JSONEncoder):
     def default(self, o):
+        if isinstance(o, (datetime.datetime, datetime.date, datetime.time)):
+            return o.isoformat()
         return o.__dict__
 
 class Config:
@@ -65,13 +67,19 @@ class Config:
         else:
             self.__dict__ = config_data
 
-    def add_subject(self, subject):
+    def add_subject(self, subject) -> bool:
+        if subject is None:
+            return False
         match = list(filter(lambda existing_subj : existing_subj.name == subject.name, self.subjects))
         if len(match) > 1:
             print('Corrupt config file')
             sys.exit(1)
 
-        match = match[0]
+        if len(match) == 0:
+            match = None
+        else:
+            match = match[0]
+
         if match is not None:
             overwrite = None
             while overwrite not in ('Y','y','N','n'):
@@ -79,9 +87,10 @@ class Config:
             if overwrite.lower() == 'y':
                 self.subjects.remove(match)
             else:
-                return
+                return False
 
         self.subjects.append(subject)
+        return True
 
     def update_subject(self, subject) -> bool:
         for old_subject in self.subjects:
