@@ -1,13 +1,43 @@
 {
     "subjects": [
         {
-            "name": "hi",
-            "app": null,
-            "periods": [],
-            "start_end": [
-                null,
-                null
-            ]
+            "name": "cmput1",
+            "app": {
+                "name": "Vim",
+                "command": "vim.exe"
+            },
+            "periods": [
+                {
+                    "days": [
+                        "m",
+                        "t",
+                        "f"
+                    ],
+                    "start": "09:30:00",
+                    "end": "21:30:00"
+                }
+            ],
+            "start_date": "1234-12-12",
+            "end_date": "2021-12-12"
+        },
+        {
+            "name": "cmput2",
+            "app": {
+                "name": "NotePad",
+                "command": "notepad.exe"
+            },
+            "periods": [
+                {
+                    "days": [
+                        "t",
+                        "r"
+                    ],
+                    "start": "08:30:00",
+                    "end": "21:45:00"
+                }
+            ],
+            "start_date": "2020-03-12",
+            "end_date": "2021-12-12"
         }
     ]
 }

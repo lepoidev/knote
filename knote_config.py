@@ -3,6 +3,7 @@ import os
 import sys
 import datetime
 import calendar
+import knote_helpers
 
 from typing import Dict
 from json import JSONEncoder
@@ -41,6 +42,19 @@ class TimePeriods:
         matches_time = self.start <= time and time <= self.end
         return matches_day and matches_time
 
+    @classmethod
+    def from_json(cls, data):
+        try:
+            timeperiods = TimePeriods()
+            timeperiods.__dict__ = data
+
+            timeperiods.start = knote_helpers.time_parse(data["start"])
+            timeperiods.end = knote_helpers.time_parse(data["end"])
+
+            return timeperiods
+        except:
+            return None
+
 class Subject:
     def __init__(self, name=None, app=None, periods=[], start_date=None, end_date=None):
         self.name = name
@@ -50,8 +64,20 @@ class Subject:
         self.end_date = end_date
 
     def is_active(self, active_datetime) -> bool:
-        matches = filter(lambda period : period.contains(active_datetime), self.periods)
+        matches = list(filter(lambda period : period.contains(active_datetime), self.periods))
         return len(matches) > 0
+
+    @classmethod
+    def from_json(cls, data):
+        try:
+            subject = Subject()
+            subject.__dict__ = data
+            subject.periods = list(map(TimePeriods.from_json, data["periods"]))
+            subject.start_date = knote_helpers.day_parse(data["start_date"])
+            subject.end_date = knote_helpers.day_parse(data["end_date"])
+            return subject
+        except:
+            return None
 
 class ConfigEncoder(JSONEncoder):
     def default(self, o):
@@ -59,13 +85,22 @@ class ConfigEncoder(JSONEncoder):
             return o.isoformat()
         return o.__dict__
 
+
+def dict_from_json(data):
+    try:
+        d = data
+        d["subjects"] = list(map(Subject.from_json, data["subjects"]))
+        return d
+    except:
+        return {}
+
 class Config:
     def __init__(self):
         config_data = get_config_data()
         if config_data is None:
             self.subjects = []
         else:
-            self.__dict__ = config_data
+            self.__dict__ = dict_from_json(config_data)
 
     def add_subject(self, subject) -> bool:
         if subject is None:
@@ -108,8 +143,10 @@ class Config:
             while active_subject not in subject_names:
                 active_subject = input('Multiple subjects are active in is time period:\n\t' + str(subject_names) + '\nSelect one of the above: ')
             return matches[subject_names.index(active_subject)]
-        else:
+        elif (len(matches) == 1):
             return matches[0]
+        else:
+            return None
 
     def get_current_subject(self) -> Subject:
         return self.get_active_subject(datetime.datetime.now())

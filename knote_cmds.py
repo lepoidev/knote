@@ -1,7 +1,6 @@
 import datetime
+import knote_helpers
 
-from datetime import date
-from datetime import time
 from knote_config import Config, Subject, TimePeriods
 from knote_editors import read_editors_from_file
 
@@ -21,28 +20,6 @@ def edit_cmd(classname):
 def remove_cmd(classname):
     pass
 
-def time_parse(time_str):
-    try:
-        time_str = time_str.upper()
-        isAM = "AM" in time_str
-        isPM = "PM" in time_str
-        if not(isAM or isPM):
-            return None
-
-        time_str = time_str.replace("AM", "")
-        time_str = time_str.replace("PM", "")
-
-        l = time_str.split(":")
-        h = int(l[0])
-        m = int(l[1])
-
-        if isPM:
-            h += 12
-
-        return datetime.time(h, m)
-    except:
-        return None
-
 def new_cmd():
     config = Config()
 
@@ -58,7 +35,7 @@ def new_cmd():
         if start_date_str.lower() == "q":
             return
         try:
-            start_date = date.fromisoformat(start_date_str)
+            start_date = datetime.date.fromisoformat(start_date_str)
             break
         except:
             print("Invalid string...\n")
@@ -70,7 +47,7 @@ def new_cmd():
         if end_date_str.lower() == "q":
             return
         try:
-            end_date = date.fromisoformat(end_date_str)
+            end_date = datetime.date.fromisoformat(end_date_str)
             break
         except:
             print("Invalid string...\n")
@@ -117,7 +94,7 @@ def new_cmd():
                 done_adding = True
                 break
 
-            period_start = time_parse(period_start_str)
+            period_start = knote_helpers.time_parse(period_start_str)
 
         # get end time
         while((period_end is None) and not(done_adding)):
@@ -128,7 +105,7 @@ def new_cmd():
                 done_adding = True
                 break
 
-            period_end = time_parse(period_end_str)
+            period_end = knote_helpers.time_parse(period_end_str)
 
         if not(done_adding):
             periods.append(TimePeriods(days, period_start, period_end))
@@ -156,4 +133,7 @@ def new_cmd():
 def open_current_cmd():
     config = Config()
     current_subject = config.get_current_subject()
+    if(current_subject is None):
+        print("No active subject")
+        return
     open_cmd(current_subject.name)
