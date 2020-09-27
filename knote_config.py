@@ -4,9 +4,12 @@ import sys
 import datetime
 import calendar
 import knote_helpers
+import knote_editors
 
 from typing import Dict
 from json import JSONEncoder
+
+DAYS_STR = "MTWRFSU"
 
 def get_config_file():
     config_file = os.getenv('KNOTE_CONFIG')
@@ -38,7 +41,8 @@ class TimePeriods:
     def contains(self, active_datetime) -> bool:
         date = active_datetime.date()
         time = active_datetime.time()
-        matches_day = calendar.day_abbr[date.weekday()] in self.days
+        cur_day = DAYS_STR[date.weekday()].lower()
+        matches_day = cur_day in [d.lower() for d in self.days]
         matches_time = self.start <= time and time <= self.end
         return matches_day and matches_time
 
@@ -56,12 +60,13 @@ class TimePeriods:
             return None
 
 class Subject:
-    def __init__(self, name=None, app=None, periods=[], start_date=None, end_date=None):
+    def __init__(self, name=None, app=None, periods=[], start_date=None, end_date=None, ext="txt"):
         self.name = name
         self.app = app
         self.periods = periods
         self.start_date = start_date
         self.end_date = end_date
+        self.ext = ext
 
     def is_active(self, active_datetime) -> bool:
         matches = list(filter(lambda period : period.contains(active_datetime), self.periods))
@@ -72,6 +77,7 @@ class Subject:
         try:
             subject = Subject()
             subject.__dict__ = data
+            subject.app = knote_editors.Editor.from_json(data["app"])
             subject.periods = list(map(TimePeriods.from_json, data["periods"]))
             subject.start_date = knote_helpers.day_parse(data["start_date"])
             subject.end_date = knote_helpers.day_parse(data["end_date"])
@@ -102,10 +108,8 @@ class Config:
         else:
             self.__dict__ = dict_from_json(config_data)
 
-    def add_subject(self, subject) -> bool:
-        if subject is None:
-            return False
-        match = list(filter(lambda existing_subj : existing_subj.name == subject.name, self.subjects))
+    def find_subject(self, classname):
+        match = list(filter(lambda existing_subj : classname == existing_subj.name, self.subjects))
         if len(match) > 1:
             print('Corrupt config file')
             sys.exit(1)
@@ -114,6 +118,17 @@ class Config:
             match = None
         else:
             match = match[0]
+        return match
+
+    def remove_subject(self, classname):
+        subject = self.find_subject(classname)
+        if(subject is not None):
+            self.subjects.remove(subject)
+
+    def add_subject(self, subject) -> bool:
+        if subject is None:
+            return False
+        match = self.find_subject(subject.name)
 
         if match is not None:
             overwrite = None
@@ -141,7 +156,9 @@ class Config:
             subject_names = [(lambda subject : subject.name)(subject) for subject in matches]
             active_subject = None
             while active_subject not in subject_names:
-                active_subject = input('Multiple subjects are active in is time period:\n\t' + str(subject_names) + '\nSelect one of the above: ')
+                active_subject = input('Multiple subjects are active in is time period:\n\t' + str(subject_names) + '\nSelect one of the above or \'q\' to quit: ')
+                if(active_subject.lower() == "q"):
+                    sys.exit(0)
             return matches[subject_names.index(active_subject)]
         elif (len(matches) == 1):
             return matches[0]

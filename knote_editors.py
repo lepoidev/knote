@@ -14,6 +14,12 @@ class Editor:
         self.name = name
         self.command = command
 
+    @classmethod
+    def from_json(cls, data):
+        editor = Editor()
+        editor.__dict__ = data
+        return editor
+
 KNOTE_EDITORS = "knote_editors.json"
 
 def create_default_editors():

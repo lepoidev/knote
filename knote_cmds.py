@@ -1,24 +1,57 @@
 import datetime
 import knote_helpers
+import json
+import sys
+import os
+import errno
 
-from knote_config import Config, Subject, TimePeriods
+from knote_config import Config, Subject, TimePeriods, get_config_data
 from knote_editors import read_editors_from_file
 
 def list_cmd():
-    config = Config()
-    config.save()
+    config_data = get_config_data()
+    print(json.dumps(config_data["subjects"], indent=4, sort_keys=True))
 
 def configure_cmd():
     pass
 
 def open_cmd(classname):
-    pass
+    config = Config()
+    subject = config.find_subject(classname)
+    if(subject is None):
+        print("Could not find \'" + classname + "\'")
+        sys.exit(1)
+    
+    cur_date = datetime.datetime.now().date()
+    knote_subject_path = None
+
+    knote_subject_path = os.getenv('KNOTE_SUBJECTS_PATH')
+    if knote_subject_path is None:
+        sys.stderr.write('missing enviroment variable \"KNOTE_SUBJECTS_PATH\"')
+        sys.exit(1)
+
+    filename = os.path.join(knote_subject_path, classname, classname + "_" + cur_date.isoformat() + "." + subject.ext)
+
+    if not os.path.exists(os.path.dirname(filename)):
+        try:
+            os.makedirs(os.path.dirname(filename))
+        except OSError as exc:
+            if exc.errno != errno.EEXIST:
+                raise
+
+    if not os.path.exists(filename):
+        with open(filename, 'w'): pass
+
+    os.system(subject.app.command + " " + filename)
+
 
 def edit_cmd(classname):
     pass
 
 def remove_cmd(classname):
-    pass
+    config = Config()
+    config.remove_subject(classname)
+    config.save()
 
 def new_cmd():
     config = Config()

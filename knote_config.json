@@ -4,40 +4,43 @@
             "name": "cmput1",
             "app": {
                 "name": "Vim",
-                "command": "vim.exe"
+                "command": "vim"
             },
             "periods": [
                 {
                     "days": [
                         "m",
                         "t",
-                        "f"
+                        "u"
                     ],
-                    "start": "09:30:00",
+                    "start": "00:00:00",
                     "end": "21:30:00"
                 }
             ],
             "start_date": "1234-12-12",
-            "end_date": "2021-12-12"
+            "end_date": "2021-12-12",
+            "ext": "md"
         },
         {
             "name": "cmput2",
             "app": {
                 "name": "NotePad",
-                "command": "notepad.exe"
+                "command": "notepad"
             },
             "periods": [
                 {
                     "days": [
                         "t",
-                        "r"
+                        "r",
+                        "u"
                     ],
-                    "start": "08:30:00",
+                    "start": "00:00:00",
                     "end": "21:45:00"
                 }
             ],
-            "start_date": "2020-03-12",
-            "end_date": "2021-12-12"
+            "start_date": "2020-01-01",
+            "end_date": "2021-12-12",
+            "ext": "txt"
         }
     ]
 }

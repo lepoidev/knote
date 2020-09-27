@@ -21,11 +21,11 @@ if __name__ == '__main__':
     if args.new:
         new_cmd()
     elif args.remove != None:
-        remove_cmd(args.remove)
+        remove_cmd(args.remove[0])
     elif args.edit != None:
-        edit_cmd(args.edit)
+        edit_cmd(args.edit[0])
     elif args.open != None:
-        open_cmd(args.open)
+        open_cmd(args.open[0])
     elif args.list:
         list_cmd()
     elif args.configure:

@@ -1,10 +1,10 @@
 [
     {
         "name": "NotePad",
-        "command": "notepad.exe"
+        "command": "notepad"
     },
     {
         "name": "Vim",
-        "command": "vim.exe"
+        "command": "vim"
     }
 ]

@@ -11,7 +11,7 @@
             "program": "knote.py",
             "console": "integratedTerminal",
             "args": [],
-            "env": { "KNOTE_PATH":"." }
+            "env": { "KNOTE_PATH":".", "KNOTE_SUBJECTS_PATH":"." }
         }
     ]
 }
