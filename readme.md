@@ -1,8 +1,5 @@
 # knote
-Automated note taking for students
-
-# Overview
-`knote` automates the creation and organization of digital class notes.
+Tool for the creation and organization of digital class notes.
 
 ## Options
 By default, running `knote` will ensure a note for the currently active subject exists and opens it with the configured application.
