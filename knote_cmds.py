@@ -19,15 +19,15 @@ def open_cmd(classname):
     config = Config()
     subject = config.find_subject(classname)
     if(subject is None):
-        print("Could not find \'" + classname + "\'")
+        print("Could not find \"" + classname + "\"")
         sys.exit(1)
     
     cur_date = datetime.datetime.now().date()
     knote_subject_path = None
 
-    knote_subject_path = os.getenv('KNOTE_SUBJECTS_PATH')
+    knote_subject_path = os.getenv("KNOTE_SUBJECTS_PATH")
     if knote_subject_path is None:
-        sys.stderr.write('missing enviroment variable \"KNOTE_SUBJECTS_PATH\"')
+        sys.stderr.write("missing enviroment variable \"KNOTE_SUBJECTS_PATH\"")
         sys.exit(1)
 
     filename = os.path.join(knote_subject_path, classname, classname + "_" + cur_date.isoformat() + "." + subject.ext)
@@ -40,7 +40,7 @@ def open_cmd(classname):
                 raise
 
     if not os.path.exists(filename):
-        with open(filename, 'w'): pass
+        with open(filename, "w"): pass
 
     os.system(subject.app.command + " " + filename)
 
@@ -56,7 +56,7 @@ def remove_cmd(classname):
 def new_cmd():
     config = Config()
 
-    name = input("Enter Subject name 'q' to quit: ")
+    name = input("Enter Subject name \'q\' to quit: ")
     if name.lower() == "q":
         return
 
@@ -64,7 +64,7 @@ def new_cmd():
     start_date = None
     start_date_str = ""
     while(True):
-        start_date_str = input("Enter the start date YYYY-MM-DD 'q' to quit: ")
+        start_date_str = input("Enter the start date YYYY-MM-DD \'q\' to quit: ")
         if start_date_str.lower() == "q":
             return
         try:
@@ -76,7 +76,7 @@ def new_cmd():
     end_date = None
     end_date_str = ""
     while(True):
-        end_date_str = input("Enter the end date YYYY-MM-DD 'q' to quit: ")
+        end_date_str = input("Enter the end date YYYY-MM-DD \'q\' to quit: ")
         if end_date_str.lower() == "q":
             return
         try:
@@ -101,10 +101,10 @@ def new_cmd():
 
         # get day
         while((len(days) == 0) and not(done_adding)):
-            day_str = input("Enter days of period (MTWRFSU) 'q' to quit, 's' to stop adding periods: ")
+            day_str = input("Enter days of period (MTWRFSU) \'q\' to quit, \'s\' to stop adding periods: ")
             if day_str.lower() == "q":
                 return
-            elif day_str.lower() == 's':
+            elif day_str.lower() == "s":
                 done_adding = True
                 break
 
@@ -113,17 +113,17 @@ def new_cmd():
                     if day.upper() in "MTWRFSU":
                         day_set.add(day)
                     else:
-                        print("unexpected character: '" + str(day) + "'")
+                        print("unexpected character: \'" + str(day) + "\'")
                 days = list(day_set)
             except:
                 pass
 
         # get start_time
         while((period_start is None) and not(done_adding)):
-            period_start_str = input("Enter start of period HH:MM(AM|PM) 'q' to quit, 's' to stop adding periods: ")
+            period_start_str = input("Enter start of period HH:MM(AM|PM) \'q\' to quit, \'s\' to stop adding periods: ")
             if period_start_str.lower() == "q":
                 return
-            elif period_start_str.lower() == 's':
+            elif period_start_str.lower() == "s":
                 done_adding = True
                 break
 
@@ -131,10 +131,10 @@ def new_cmd():
 
         # get end time
         while((period_end is None) and not(done_adding)):
-            period_end_str = input("Enter end of period HH:MM(AM|PM) 'q' to quit, 's' to stop adding periods: ")
+            period_end_str = input("Enter end of period HH:MM(AM|PM) \'q\' to quit, \'s\' to stop adding periods: ")
             if period_end_str.lower() == "q":
                 return
-            elif period_end_str.lower() == 's':
+            elif period_end_str.lower() == "s":
                 done_adding = True
                 break
 
@@ -151,10 +151,10 @@ def new_cmd():
         print("\t" + editor.name)
     chosen = None
     while(chosen is None):
-        chosen_str = input("Choose an editor from above 'q' to quit, 's' to stop adding periods: ")
+        chosen_str = input("Choose an editor from above \'q\' to quit, \'s\' to stop adding periods: ")
         if period_start_str.lower() == "q":
             return
-        elif period_start_str.lower() == 's':
+        elif period_start_str.lower() == "s":
             done_adding = True
         chosen = next((editor for editor in editors if editor.name.lower() == chosen_str.lower()), None)
 

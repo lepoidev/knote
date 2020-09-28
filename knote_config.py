@@ -12,23 +12,23 @@ from json import JSONEncoder
 DAYS_STR = "MTWRFSU"
 
 def get_config_file():
-    config_file = os.getenv('KNOTE_CONFIG')
+    config_file = os.getenv("KNOTE_CONFIG")
     if config_file is None:
-        knote_path = os.getenv('KNOTE_PATH')
+        knote_path = os.getenv("KNOTE_PATH")
         if knote_path is None:
-            sys.stderr.write('missing enviroment variable \"KNOTE_PATH\"')
+            sys.stderr.write("missing enviroment variable \"KNOTE_PATH\"")
             sys.exit(1)
-        config_file = os.path.join(knote_path, 'knote_config.json')
+        config_file = os.path.join(knote_path, "knote_config.json")
     return config_file
 
 def get_config_data():
     config_data = None
     config_file = get_config_file()
     try:
-        with open(config_file, 'r') as json_file:
+        with open(config_file, "r") as json_file:
             config_data = json.load(json_file)
     except IOError as e:
-        print('I/O error({0}): {1}'.format(e.errno, e.strerror))
+        print("I/O error({0}): {1}".format(e.errno, e.strerror))
     finally:
         return config_data
 
@@ -92,7 +92,7 @@ class ConfigEncoder(JSONEncoder):
         return o.__dict__
 
 
-def dict_from_json(data):
+def config_dict_from_json(data):
     try:
         d = data
         d["subjects"] = list(map(Subject.from_json, data["subjects"]))
@@ -106,12 +106,12 @@ class Config:
         if config_data is None:
             self.subjects = []
         else:
-            self.__dict__ = dict_from_json(config_data)
+            self.__dict__ = config_dict_from_json(config_data)
 
     def find_subject(self, classname):
         match = list(filter(lambda existing_subj : classname == existing_subj.name, self.subjects))
         if len(match) > 1:
-            print('Corrupt config file')
+            print("Corrupt config file")
             sys.exit(1)
 
         if len(match) == 0:
@@ -132,9 +132,9 @@ class Config:
 
         if match is not None:
             overwrite = None
-            while overwrite not in ('Y','y','N','n'):
-                overwrite = input('Subject already exists. Overwrite? (Y/N): ')
-            if overwrite.lower() == 'y':
+            while overwrite not in ("Y","y","N","n"):
+                overwrite = input("Subject already exists. Overwrite? (Y/N): ")
+            if overwrite.lower() == "y":
                 self.subjects.remove(match)
             else:
                 return False
@@ -156,7 +156,7 @@ class Config:
             subject_names = [(lambda subject : subject.name)(subject) for subject in matches]
             active_subject = None
             while active_subject not in subject_names:
-                active_subject = input('Multiple subjects are active in is time period:\n\t' + str(subject_names) + '\nSelect one of the above or \'q\' to quit: ')
+                active_subject = input("Multiple subjects are active in is time period:\n\t" + str(subject_names) + "\nSelect one of the above or \'q\' to quit: ")
                 if(active_subject.lower() == "q"):
                     sys.exit(0)
             return matches[subject_names.index(active_subject)]
@@ -171,7 +171,7 @@ class Config:
     def save(self):
         config_file = get_config_file()
         try:
-            with open(config_file, 'w') as json_file:
+            with open(config_file, "w") as json_file:
                 json.dump(self, json_file, indent=4, cls=ConfigEncoder)
         except IOError as e:
-            print('I/O error({0}): {1}'.format(e.errno, e.strerror))
+            print("I/O error({0}): {1}".format(e.errno, e.strerror))
