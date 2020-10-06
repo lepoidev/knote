@@ -29,7 +29,7 @@ def get_config_data():
         with open(config_file, "r") as json_file:
             config_data = json.load(json_file)
     except IOError as e:
-        print("I/O error({0}): {1}".format(e.errno, e.strerror))
+        print(config_file + "get cfg I/O error({0}): {1}".format(e.errno, e.strerror))
     finally:
         return config_data
 
