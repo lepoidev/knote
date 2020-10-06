@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/lepoidev/knote.svg?branch=master)](https://travis-ci.org/lepoidev/knote)
 # knote
 Tool for the creation and organization of digital class notes.
 
