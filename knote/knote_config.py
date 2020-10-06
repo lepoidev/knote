@@ -19,7 +19,8 @@ def get_config_file():
         if knote_path is None:
             sys.stderr.write("missing enviroment variable \"KNOTE_PATH\"")
             sys.exit(1)
-        config_file = os.path.join(knote_path, "knote_config.json")
+        default_config = os.path.join("config", "knote_config.json")
+        config_file = os.path.join(knote_path, default_config)
     return config_file
 
 def get_config_data():

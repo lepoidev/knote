@@ -130,3 +130,4 @@ dmypy.json
 
 # testing
 /test/
+/config/knote_config.json
