@@ -14,10 +14,11 @@ By default, running `knote` will ensure a note for the currently active subject 
 ## Environment variables
 ```bash
 export KNOTE_PATH=...          # path which contains knote.py
+export KNOTE_CONFIG=...        # path to knote config json file
 export KNOTE_SUBJECTS_PATH=... # where you want to store your class folders
 ```
 
 ## Add an Alias
 ```bash
-alias knote='python3 "$KNOTE_PATH"/knote.py'
+alias knote='python3 "$KNOTE_PATH"/knote/knote_main.py'
 ```
