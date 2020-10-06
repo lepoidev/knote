@@ -1,0 +1,16 @@
+language: python
+dist: xenial
+python:
+  - "3.4"
+  - "3.5"
+  - "3.6"
+  - "3.7"
+  - "3.8"
+env:
+  - KNOTE_PATH=.
+  - KNOTE_SUBJECTS_PATH=./test/
+  - KNOTE_CONFIG=./config/knote_config.json
+install:
+  - pip install -r requirements.txt
+script:
+  - pytest
