@@ -8,10 +8,10 @@
             "name": "Python: Current File",
             "type": "python",
             "request": "launch",
-            "program": "knote.py",
+            "program": ".\\knote\\knote_main.py",
             "console": "integratedTerminal",
-            "args": [],
-            "env": { "KNOTE_PATH":".", "KNOTE_SUBJECTS_PATH":"." }
+            "args": ["-o", "cmput1"],
+            "env": { "KNOTE_PATH":".\\knote\\", "KNOTE_SUBJECTS_PATH":".\\test\\", "KNOTE_CONFIG":".\\config\\knote_config.json" }
         }
     ]
 }

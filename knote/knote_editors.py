@@ -1,4 +1,5 @@
 import json
+import os
 from json import JSONEncoder
 
 class EditorEncoder(JSONEncoder):
@@ -20,7 +21,14 @@ class Editor:
         editor.__dict__ = data
         return editor
 
-KNOTE_EDITORS = "knote_editors.json"
+def get_knote_editors_path():
+    knote_path = os.getenv("KNOTE_PATH")
+    if knote_path is None:
+        sys.stderr.write("missing enviroment variable \"KNOTE_PATH\"")
+        sys.exit(1)
+
+    knote_editors = os.path.join(knote_path, "knote_editors.json")
+    return knote_editors
 
 def create_default_editors():
     try:
@@ -32,15 +40,23 @@ def create_default_editors():
     except IOError as e:
         print("I/O error({0}): {1}".format(e.errno, e.strerror))
 
-def read_editors_from_file(json_file=KNOTE_EDITORS):
+def parse_editor_list(editors_data):
+    editors = []
+    for editor_data in editors_data:
+        try:
+            editor = Editor()
+            editor.__dict__ = editor_data
+            editors.append(editor)
+        finally:
+            pass
+    return editors
+
+def read_editors_from_file(json_file=get_knote_editors_path()):
     editors = []
     try:
         with open(json_file, "r") as json_file:
             editors_data = json.load(json_file)
-            for editor_data in editors_data:
-                editor = Editor()
-                editor.__dict__ = editor_data
-                editors.append(editor)
+            editors = parse_editor_list(editors_data)
     except IOError as e:
         print("I/O error({0}): {1}".format(e.errno, e.strerror))
     finally:

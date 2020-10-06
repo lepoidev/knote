@@ -1,5 +1,4 @@
 import datetime
-import knote_helpers
 import json
 import sys
 import os
@@ -7,6 +6,7 @@ import errno
 
 from knote_config import Config, Subject, TimePeriods, get_config_data
 from knote_editors import read_editors_from_file
+from knote_helpers import date_parse, time_parse
 
 def list_cmd():
     config_data = get_config_data()
@@ -127,7 +127,7 @@ def new_cmd():
                 done_adding = True
                 break
 
-            period_start = knote_helpers.time_parse(period_start_str)
+            period_start = time_parse(period_start_str)
 
         # get end time
         while((period_end is None) and not(done_adding)):
@@ -138,7 +138,10 @@ def new_cmd():
                 done_adding = True
                 break
 
-            period_end = knote_helpers.time_parse(period_end_str)
+            period_end = time_parse(period_end_str)
+            if period_end <= period_start:
+                period_end = None
+                print("The end of period must be strictly greater than " + period_start_str)
 
         if not(done_adding):
             periods.append(TimePeriods(days, period_start, period_end))

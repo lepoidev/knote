@@ -1,8 +1,10 @@
 import datetime
 
-def day_parse(day_str):
+def date_parse(day_str):
     try:
         ymd = day_str.split("-")
+        if len(ymd) != 3:
+            return None
         return datetime.date(int(ymd[0]), int(ymd[1]), int(ymd[2]))
     except:
         return None
@@ -16,6 +18,8 @@ def time_parse(time_str):
         time_str = time_str.replace("PM", "")
 
         l = time_str.split(":")
+        if len(l) not in [2,3]:
+            return None
         h = int(l[0])
         m = int(l[1])
 
