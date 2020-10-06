@@ -4,7 +4,8 @@ import sys
 import datetime
 import calendar
 import knote_helpers
-import knote_editors
+
+from knote_editors import Editor
 
 from typing import Dict
 from json import JSONEncoder
@@ -43,7 +44,7 @@ class TimePeriods:
         time = active_datetime.time()
         cur_day = DAYS_STR[date.weekday()].lower()
         matches_day = cur_day in [d.lower() for d in self.days]
-        matches_time = self.start <= time and time <= self.end
+        matches_time = self.start <= time and time < self.end
         return matches_day and matches_time
 
     @classmethod
@@ -52,8 +53,10 @@ class TimePeriods:
             timeperiods = TimePeriods()
             timeperiods.__dict__ = data
 
-            timeperiods.start = knote_helpers.time_parse(data["start"])
-            timeperiods.end = knote_helpers.time_parse(data["end"])
+            start_str = data["start"]
+            end_str = data["end"]
+            timeperiods.start = knote_helpers.time_parse(start_str)
+            timeperiods.end = knote_helpers.time_parse(end_str)
 
             return timeperiods
         except:
@@ -77,10 +80,10 @@ class Subject:
         try:
             subject = Subject()
             subject.__dict__ = data
-            subject.app = knote_editors.Editor.from_json(data["app"])
+            subject.app = Editor.from_json(data["app"])
             subject.periods = list(map(TimePeriods.from_json, data["periods"]))
-            subject.start_date = knote_helpers.day_parse(data["start_date"])
-            subject.end_date = knote_helpers.day_parse(data["end_date"])
+            subject.start_date = knote_helpers.date_parse(data["start_date"])
+            subject.end_date = knote_helpers.date_parse(data["end_date"])
             return subject
         except:
             return None

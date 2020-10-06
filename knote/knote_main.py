@@ -1,9 +1,9 @@
 import sys
 import argparse
-
+import tests.knote_config_test
 from knote_cmds import new_cmd, remove_cmd, edit_cmd, open_cmd, list_cmd, configure_cmd, open_current_cmd
 
-if __name__ == "__main__":
+def create_cmd_parser():
     parser = argparse.ArgumentParser(prog="knote")
     group = parser.add_mutually_exclusive_group(required=False)
     group.add_argument("-n", "--new", action="store_true", help="add new subject")
@@ -12,11 +12,16 @@ if __name__ == "__main__":
     group.add_argument("-o", "--open", nargs=1, help="open a specific subject")
     group.add_argument("-l", "--list", action="store_true", help="list all subjects" )
     group.add_argument("-c", "--configure", action="store_true", help="configure json file")
-    
+    return parser
+
+if __name__ == "__main__":
+    parser = create_cmd_parser()
     try:
         args = parser.parse_args()
     except argparse.ArgumentError as exc:
         print(exc.message)
+
+    tests.knote_config_test.test_config_json_ops()
 
     if args.new:
         new_cmd()
