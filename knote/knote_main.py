@@ -1,6 +1,6 @@
 import sys
 import argparse
-import tests.knote_config_test
+
 from knote_cmds import new_cmd, remove_cmd, edit_cmd, open_cmd, list_cmd, configure_cmd, open_current_cmd
 
 def create_cmd_parser():
@@ -20,8 +20,6 @@ if __name__ == "__main__":
         args = parser.parse_args()
     except argparse.ArgumentError as exc:
         print(exc.message)
-
-    tests.knote_config_test.test_config_json_ops()
 
     if args.new:
         new_cmd()
