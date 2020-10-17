@@ -20,7 +20,7 @@ def open_cmd(classname):
     subject = config.find_subject(classname)
     if(subject is None):
         print("Could not find \"" + classname + "\"")
-        sys.exit(1)
+        sys.exit(0)
     
     cur_date = datetime.datetime.now().date()
     knote_subject_path = None

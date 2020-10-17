@@ -8,10 +8,12 @@
             "name": "Python: Current File",
             "type": "python",
             "request": "launch",
-            "program": ".\\knote\\knote_main.py",
+            "program": "./knote/knote_main.py", // linux
+            //"program": ".\\knote\\knote_main.py", // windows
             "console": "integratedTerminal",
-            "args": ["-o", "cmput1"],
-            "env": { "KNOTE_PATH":".", "KNOTE_SUBJECTS_PATH":".\\test\\" }//, "KNOTE_CONFIG":".\\config\\knote_config.json" }
+            "args": ["-o", "s1"],
+            "env": { "KNOTE_PATH":".", "KNOTE_SUBJECTS_PATH":"./test/", "KNOTE_CONFIG":"./config/knote_config.json" } // linux
+            //"env": { "KNOTE_PATH":".", "KNOTE_SUBJECTS_PATH":".\\test\\", "KNOTE_CONFIG":".\\config\\knote_config.json" } //
         }
     ]
 }

@@ -2,15 +2,19 @@ import json
 import os
 import sys
 import datetime
-import calendar
 import knote_helpers
 
+from enum import Enum
 from knote_editors import Editor
-
 from typing import Dict
 from json import JSONEncoder
 
 DAYS_STR = "MTWRFSU"
+
+class Version(Enum):
+    INITIAL = 0
+
+currentVer = Version.INITIAL
 
 def get_config_file():
     config_file = os.getenv("KNOTE_CONFIG")

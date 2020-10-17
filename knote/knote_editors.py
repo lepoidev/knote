@@ -1,5 +1,6 @@
 import json
 import os
+import sys
 from json import JSONEncoder
 
 class EditorEncoder(JSONEncoder):
@@ -32,7 +33,8 @@ def get_knote_editors_path():
 
 def create_default_editors():
     try:
-        with open(KNOTE_EDITORS, "w") as json_file:
+        knote_editors = get_knote_editors_path()
+        with open(knote_editors, "w") as json_file:
             editors = []
             editors.append(Editor("NotePad", "notepad.exe"))
             editors.append(Editor("Vim", "vim.exe"))
@@ -59,5 +61,6 @@ def read_editors_from_file(json_file=get_knote_editors_path()):
             editors = parse_editor_list(editors_data)
     except IOError as e:
         print("I/O error({0}): {1}".format(e.errno, e.strerror))
-    finally:
-        return editors
+        return []
+
+    return editors

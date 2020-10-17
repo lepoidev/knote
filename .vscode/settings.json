@@ -1,9 +1,12 @@
 {
-    "python.pythonPath": "C:\\Users\\Kyle\\AppData\\Local\\Programs\\Python\\Python38\\python.exe",
+    //"python.pythonPath": "C:\\Users\\Kyle\\AppData\\Local\\Programs\\Python\\Python38\\python.exe", // windows
+    "python.pythonPath": "/usr/local/bin/python3", // linux
     "python.linting.enabled": true,
     "python.linting.pylintEnabled": true,
+    "python.autoComplete.extraPaths": ["../knote/"],
     "python.linting.pylintArgs": [
         "--init-hook",
-        "import sys; sys.path.append('..\\knote\\')"
+        "import sys; sys.path.append('../knote/')" // linux
+        //"import sys; sys.path.append('..\\knote\\')" // windows
     ]
 }
