@@ -36,8 +36,8 @@ def create_default_editors():
         knote_editors = get_knote_editors_path()
         with open(knote_editors, "w") as json_file:
             editors = []
-            editors.append(Editor("NotePad", "notepad.exe"))
-            editors.append(Editor("Vim", "vim.exe"))
+            editors.append(Editor("NotePad", "notepad"))
+            editors.append(Editor("Vim", "vim"))
             json.dump(editors, json_file, indent=4, cls=EditorsEncoder)
     except IOError as e:
         print("I/O error({0}): {1}".format(e.errno, e.strerror))

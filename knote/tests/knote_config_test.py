@@ -25,8 +25,8 @@ tp_prev = TimePeriods(days=[prev_day], start=start_time, end=end_time)
 tp_next = TimePeriods(days=[next_day], start=start_time, end=end_time)
 start_datetime = datetime.datetime.combine(start_date, start_time)
 end_datetime = datetime.datetime.combine(end_date, end_time)
-notepad = Editor("NotePad", "notepad.exe")
-vim = Editor("Vim", "vim.exe")
+notepad = Editor("NotePad", "notepad")
+vim = Editor("Vim", "vim")
 
 # do not call save ever on the return value
 def create_empty_config():
