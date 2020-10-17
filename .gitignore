@@ -131,7 +131,10 @@ dmypy.json
 # testing
 /test/
 /config/knote_config.json
+
+# vscode
 .vscode/settings.json
 .vscode/launch.json
 
+# mac
 .DS_Store

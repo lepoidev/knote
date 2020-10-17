@@ -8,8 +8,8 @@ def test_get_knote_editors_path():
 def test_editor_json():
     # create json
     editors = []
-    editors.append(Editor("NotePad", "notepad.exe"))
-    editors.append(Editor("Vim", "vim.exe"))
+    editors.append(Editor("NotePad", "notepad"))
+    editors.append(Editor("Vim", "vim"))
     json_out = json.dumps(editors, indent=4, cls=EditorsEncoder)
 
     # parse json
