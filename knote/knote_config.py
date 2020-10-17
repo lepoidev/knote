@@ -2,15 +2,18 @@ import json
 import os
 import sys
 import datetime
-import calendar
 import knote_helpers
 
+from enum import Enum
 from knote_editors import Editor
-
 from typing import Dict
 from json import JSONEncoder
 
 DAYS_STR = "MTWRFSU"
+
+class Version(Enum):
+    INITIAL = 0
+    Current = INITIAL
 
 def get_config_file():
     config_file = os.getenv("KNOTE_CONFIG")
@@ -93,6 +96,8 @@ class ConfigEncoder(JSONEncoder):
     def default(self, o):
         if isinstance(o, (datetime.datetime, datetime.date, datetime.time)):
             return o.isoformat()
+        elif isinstance(o, Enum):
+            return o.value
         return o.__dict__
 
 
@@ -100,6 +105,8 @@ def config_dict_from_json(data):
     try:
         d = data
         d["subjects"] = list(map(Subject.from_json, data["subjects"]))
+        version = Version(int(data["version"]))
+        d["version"] = version
         return d
     except:
         return {}
@@ -109,8 +116,11 @@ class Config:
         config_data = get_config_data()
         if config_data is None:
             self.subjects = []
+            self.version = Version.Current
         else:
             self.__dict__ = config_dict_from_json(config_data)
+            # todo - do needed updates for the version
+            self.version = Version.Current
 
     def find_subject(self, classname):
         match = list(filter(lambda existing_subj : classname == existing_subj.name, self.subjects))

@@ -1,9 +1,0 @@
-{
-    "python.pythonPath": "C:\\Users\\Kyle\\AppData\\Local\\Programs\\Python\\Python38\\python.exe",
-    "python.linting.enabled": true,
-    "python.linting.pylintEnabled": true,
-    "python.linting.pylintArgs": [
-        "--init-hook",
-        "import sys; sys.path.append('..\\knote\\')"
-    ]
-}

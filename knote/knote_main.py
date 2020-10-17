@@ -4,30 +4,30 @@ import argparse
 from knote_cmds import new_cmd, remove_cmd, edit_cmd, open_cmd, list_cmd, configure_cmd, open_current_cmd
 
 def create_cmd_parser():
-    parser = argparse.ArgumentParser(prog="knote")
-    group = parser.add_mutually_exclusive_group(required=False)
+    knote_parser = argparse.ArgumentParser(prog="knote")
+    group = knote_parser.add_mutually_exclusive_group(required=False)
     group.add_argument("-n", "--new", action="store_true", help="add new subject")
     group.add_argument("-r", "--remove", nargs=1, help="remove a subject")
     group.add_argument("-e", "--edit", nargs=1, help="edit a subject")
     group.add_argument("-o", "--open", nargs=1, help="open a specific subject")
     group.add_argument("-l", "--list", action="store_true", help="list all subjects" )
     group.add_argument("-c", "--configure", action="store_true", help="configure json file")
-    return parser
+    return knote_parser
 
-if __name__ == "__main__":
-    parser = create_cmd_parser()
+def main():
+    knote_parser = create_cmd_parser()
     try:
-        args = parser.parse_args()
+        args = knote_parser.parse_args()
     except argparse.ArgumentError as exc:
         print(exc.message)
 
     if args.new:
         new_cmd()
-    elif args.remove != None:
+    elif args.remove is not None:
         remove_cmd(args.remove[0])
-    elif args.edit != None:
+    elif args.edit is not None:
         edit_cmd(args.edit[0])
-    elif args.open != None:
+    elif args.open is not None:
         open_cmd(args.open[0])
     elif args.list:
         list_cmd()
@@ -37,3 +37,6 @@ if __name__ == "__main__":
         open_current_cmd()
 
     sys.exit(0)
+
+if __name__ == "__main__":
+    main()
